@@ -22,7 +22,7 @@ cd test
 
 for f in lfi_ io_poll
 do
-  cp ../../../share/$f .
+  cp ../../../../../../share/$f .
   chmod +x $f
 done
 
