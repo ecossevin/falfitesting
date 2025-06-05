@@ -20,7 +20,7 @@ cd test
 
 for f in lfi_ 
 do
-  cp ../../../share/$f .
+  cp ../../../../../../share/$f .
   chmod +x $f
 done
 
