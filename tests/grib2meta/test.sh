@@ -14,6 +14,8 @@ LFITOOLS=$2
 p=$3
 grib_api_prefix=$4
 
+f_name=$(echo "$f" | sed 's/^[^/]*\///; s/\//_/g')
+
 cd $p
 
 export GRIB_DEFINITION_PATH=$p/extra_grib_defs:$grib_api_prefix/share/definitions:$grib_api_prefix/share/eccodes/definitions
@@ -39,27 +41,27 @@ mkdir -p $d
 $LFITOOLS fatestgrib2meta --fa-file-1 $f  --fa-file-2 "test/$f" 
 $LFITOOLS lfidiff --lfi-file-1 $f  --lfi-file-2 "test/$f" --out "test/$f.diff"
 
-\rm -f zero.grib.$f pack.grib.$f
+\rm -f zero.$f_name.grib pack.$f_name.grib
 
-$LFITOOLS extractgrib --fa-file $f  --grib-file zero.grib.$f --only $(file2list test/$f.diff)
-$LFITOOLS extractgrib --fa-file "test/$f" --grib-file pack.grib.$f --only "file://test/$f.diff"
+$LFITOOLS extractgrib --fa-file $f  --grib-file zero.$f_name.grib --only $(file2list test/$f.diff)
+$LFITOOLS extractgrib --fa-file "test/$f" --grib-file pack.$f_name.grib --only "file://test/$f.diff"
 
-ls -l zero.grib.$f pack.grib.$f
+ls -l zero.$f_name.grib pack.$f_name.grib
 
-if [ -s zero.grib.$f ]
+if [ -s zero.$f_name.grib ]
 then
 
-$grib_api_prefix/bin/grib_dump -O zero.grib.$f > zero.$f.txt
-$grib_api_prefix/bin/grib_dump -O pack.grib.$f > pack.$f.txt
+$grib_api_prefix/bin/grib_dump -O zero.$f_name.grib > zero.$f_name.txt
+$grib_api_prefix/bin/grib_dump -O pack.$f_name.grib > pack.$f_name.txt
 
-\rm -f zero.grib.$f pack.grib.$f
+\rm -f zero.$f_name.grib pack.$f_name.grib
 
-perl -i -ne ' print unless (m/^\s*\**\s+FILE:/o) ' zero.$f.txt pack.$f.txt
+perl -i -ne ' print unless (m/^\s*\**\s+FILE:/o) ' zero.$f_name.txt pack.$f_name.txt
 
-ls -l zero.$f.txt pack.$f.txt
+ls -l zero.$f_name.txt pack.$f_name.txt
 
 #set +e
-diff zero.$f.txt pack.$f.txt
+diff zero.$f_name.txt pack.$f_name.txt
 #set -e
 
 #\mv -f "test/$f" $f
