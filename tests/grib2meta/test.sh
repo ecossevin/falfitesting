@@ -39,27 +39,27 @@ mkdir -p $d
 $LFITOOLS fatestgrib2meta --fa-file-1 $f  --fa-file-2 "test/$f" 
 $LFITOOLS lfidiff --lfi-file-1 $f  --lfi-file-2 "test/$f" --out "test/$f.diff"
 
-\rm -f zero.grib pack.grib
+\rm -f zero.grib.$f pack.grib.$f
 
-$LFITOOLS extractgrib --fa-file $f  --grib-file zero.grib --only $(file2list test/$f.diff)
-$LFITOOLS extractgrib --fa-file "test/$f" --grib-file pack.grib --only "file://test/$f.diff"
+$LFITOOLS extractgrib --fa-file $f  --grib-file zero.grib.$f --only $(file2list test/$f.diff)
+$LFITOOLS extractgrib --fa-file "test/$f" --grib-file pack.grib.$f --only "file://test/$f.diff"
 
-ls -l zero.grib pack.grib
+ls -l zero.grib.$f pack.grib.$f
 
-if [ -s zero.grib ]
+if [ -s zero.grib.$f ]
 then
 
-$grib_api_prefix/bin/grib_dump -O zero.grib > zero.txt
-$grib_api_prefix/bin/grib_dump -O pack.grib > pack.txt
+$grib_api_prefix/bin/grib_dump -O zero.grib.$f > zero.$f.txt
+$grib_api_prefix/bin/grib_dump -O pack.grib.$f > pack.$f.txt
 
-\rm -f zero.grib pack.grib
+\rm -f zero.grib.$f pack.grib.$f
 
-perl -i -ne ' print unless (m/^\s*\**\s+FILE:/o) ' zero.txt pack.txt
+perl -i -ne ' print unless (m/^\s*\**\s+FILE:/o) ' zero.$f.txt pack.$f.txt
 
-ls -l zero.txt pack.txt
+ls -l zero.$f.txt pack.$f.txt
 
 #set +e
-diff zero.txt pack.txt
+diff zero.$f.txt pack.$f.txt
 #set -e
 
 #\mv -f "test/$f" $f
