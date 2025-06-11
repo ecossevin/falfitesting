@@ -5,6 +5,7 @@ set -x
 
 LFITOOLS=$1
 p=$2
+src_dir=$3
 
 cd $p
 
@@ -20,7 +21,7 @@ cd test
 
 for f in lfi_ 
 do
-  cp ../../../../../../share/$f .
+  cp $src_dir/share/$f .
   chmod +x $f
 done
 
