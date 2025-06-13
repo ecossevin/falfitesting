@@ -52,8 +52,8 @@ ls -l zero.$f_name.grib pack.$f_name.grib
 if [ -s zero.$f_name.grib ]
 then
 
-$grib_api_prefix/bin/grib_dump -O zero.$f_name.grib > zero.$f_name.txt
-$grib_api_prefix/bin/grib_dump -O pack.$f_name.grib > pack.$f_name.txt
+$grib_api_prefix/../bin/grib_dump -O zero.$f_name.grib > zero.$f_name.txt
+$grib_api_prefix/../bin/grib_dump -O pack.$f_name.grib > pack.$f_name.txt
 
 \rm -f zero.$f_name.grib pack.$f_name.grib
 
