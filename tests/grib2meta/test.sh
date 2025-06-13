@@ -1,3 +1,4 @@
+#!/bin/bash
 # (C) Copyright 2022- ECMWF.
 # (C) Copyright 2022- Meteo-France.
 #
