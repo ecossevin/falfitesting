@@ -14,8 +14,18 @@ set -x
 LFITOOLS=$1
 p=$2
 src_dir=$3
+build_dir=$4
 
-cd $p
+test_name=$(basename $p)
+
+cd $build_dir
+mkdir -p tests_results
+
+cd tests_results
+
+\rm -rf $test_name
+mkdir -p $test_name
+cd $test_name
 
 export DR_HOOK_NOT_MPI=1
 
@@ -23,11 +33,7 @@ ulimit -s unlimited
 
 export LFITOOLS=$1
 
-\rm -rf test/
-
-cp -r t0031 test
-
-cd test
+cp -r $p/t0031/* .
 
 for f in lfi_ io_poll
 do
@@ -39,14 +45,14 @@ done
 
 export PATH=$PWD:$PATH
 
-io_poll --prefix ICMSH   > list.ICMSH
-io_poll --prefix GRIBPF  > list.GRIBPF
+./io_poll --prefix ICMSH   > list.ICMSH
+./io_poll --prefix GRIBPF  > list.GRIBPF
 
-diff list.ICMSH  ref/list.ICMSH
-diff list.GRIBPF ref/list.GRIBPF
+diff list.ICMSH  $p/t0031/ref/list.ICMSH
+diff list.GRIBPF $p/t0031/ref/list.GRIBPF
 
 for f in $(cat list.ICMSH)
 do
-  $LFITOOLS lfidiff --lfi-file-1 $f --lfi-file-2 ref/$f
+  $LFITOOLS lfidiff --lfi-file-1 $f --lfi-file-2 $p/t0031/ref/$f
 done
 
