@@ -13,18 +13,25 @@ set -x
 
 LFITOOLS=$1
 p=$2
+build_dir=$3
 
-cd $p
+test_name=$(basename $p)
+ 
+cd $build_dir
+mkdir -p tests_results
+
+cd tests_results
+
+\rm -rf $test_name
+mkdir -p $test_name
+cd $test_name
+
 export DR_HOOK_NOT_MPI=1
 
 ulimit -s unlimited
 
 export LFITOOLS=$1
 
-\rm -rf test/
-mkdir -p test
-cd test
-
 $LFITOOLS lfitestformat --nopts 10000 --lfi-file LFITEST
 $LFITOOLS lfilist LFITEST > LFITEST.list
-diff ../ref/LFITEST.list LFITEST.list
+diff $p/ref/LFITEST.list LFITEST.list
