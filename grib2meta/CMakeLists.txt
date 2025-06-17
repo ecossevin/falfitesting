@@ -17,8 +17,12 @@ include(ListTests_sp.cmake)
 set (LFITOOLS ${CMAKE_BINARY_DIR}/bin/lfitools_sp)
 endif()
 
+file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/tests_results)
+file(REMOVE_RECURSE ${CMAKE_BINARY_DIR}/tests_results/grib2meta/)
+file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/tests_results/grib2meta/)
+
 foreach( f ${LIST_TESTS})
 
 add_test(NAME ${f}
-    COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/test.sh ${f} ${LFITOOLS} ${CMAKE_CURRENT_SOURCE_DIR} ${ECCODES_LIB_DIR})
+    COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/test.sh ${f} ${LFITOOLS} ${CMAKE_CURRENT_SOURCE_DIR} ${ECCODES_LIB_DIR} ${CMAKE_BINARY_DIR})
 endforeach()

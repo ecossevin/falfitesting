@@ -40,7 +40,7 @@ print "@list"
 
 
 
-\rm -f "$f"
+\rm -f "$f_name"
 
 $LFITOOLS fatestgrib2data --fa-file-1 $p/$f  --fa-file-2 $f_name
 $LFITOOLS lfidiff --lfi-file-1 $p/$f  --lfi-file-2 "$f_name" --out "$f_name.diff"
