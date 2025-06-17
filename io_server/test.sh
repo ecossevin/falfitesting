@@ -11,7 +11,7 @@
 set -e
 set -x
 
-LFITOOLS=$1
+export LFITOOLS=$1
 p=$2
 src_dir=$3
 build_dir=$4
@@ -30,8 +30,6 @@ cd $test_name
 export DR_HOOK_NOT_MPI=1
 
 ulimit -s unlimited
-
-export LFITOOLS=$1
 
 cp -r $p/t0031/* .
 
