@@ -14,18 +14,24 @@ set -x
 LFITOOLS=$1
 p=$2
 src_dir=$3
+build_dir=$4
 
-cd $p
+test_name=$(basename $p)
+
+cd $build_dir
+mkdir -p tests_results
+
+cd tests_results
+
+\rm -rf $test_name
+mkdir -p $test_name
+cd $test_name
 
 export DR_HOOK_NOT_MPI=1
 
 ulimit -s unlimited
 
-\rm -rf test/
-
-cp -r t0031 test
-
-cd test
+cp -r $p/t0031/* .
 
 for f in lfi_ 
 do
@@ -38,13 +44,13 @@ done
 export PATH=$PWD:$PATH
 export LFITOOLS
 
-lfi_
+./lfi_
 
 lfi_merge io_serv.*.d/ICMSH0000+0006:00.* ICMSH0000+0006:00
 
 $LFITOOLS lfilist ICMSH0000+0006:00 > ICMSH0000+0006:00.list
 
-diff ICMSH0000+0006:00.list ref/ICMSH0000+0006:00.list
+diff ICMSH0000+0006:00.list $p/t0031/ref/ICMSH0000+0006:00.list
 
 lfi_pack ICMSH0000+0006:00 > ICMSH0000+0006:00.pack
 
@@ -55,7 +61,7 @@ done
 
 for f in ICMSH0000+0006:00 ICMSH0000+0006:00.pack ICMSH0000+0006:00.copy.in ICMSH0000+0006:00.copy.inout
 do
-$LFITOOLS lfidiff --lfi-file-1 $f --lfi-file-2 ref/ICMSH0000+0006:00.pack
+$LFITOOLS lfidiff --lfi-file-1 $f --lfi-file-2 $p/t0031/ref/ICMSH0000+0006:00.pack
 done
 
 
