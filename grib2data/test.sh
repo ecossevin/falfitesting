@@ -23,9 +23,15 @@ cd tests_results
 test_name=$(basename $p)
 cd $test_name
 
+unset ECCODES_DEFINITION_PATH
+unset GRIB_DEFINITION_PATH
+unset ECCODES_SAMPLES_PATH
+unset GRIB_SAMPLE_PATH 
+grib_api_prefix=$(dirname $grib_api_prefix)
 
-export GRIB_DEFINITION_PATH=$p/extra_grib_defs:$grib_api_prefix/share/definitions:$grib_api_prefix/share/eccodes/definitions
-export GRIB_SAMPLES_PATH=$grib_api_prefix/ifs_samples/grib1:$grib_api_prefix/share/eccodes/ifs_samples/grib1
+## ECCODES_DEFINITION_PATH and ECCODES_SAMPLES_PATH aren't needed
+#export ECCODES_DEFINITION_PATH=$p/extra_grib_defs:$grib_api_prefix/share/definitions:$grib_api_prefix/share/eccodes/definitions
+#export ECCODES_SAMPLES_PATH=$grib_api_prefix/ifs_samples/grib1:$grib_api_prefix/share/eccodes/ifs_samples/grib1
 export PATH=$grib_api_prefix/bin:$PATH
 
 function file2list ()
@@ -55,8 +61,8 @@ ls -l zero.$f_name.grib pack.$f_name.grib
 if [ -s zero.$f_name.grib ]
 then
 
-$grib_api_prefix/../bin/grib_dump -O zero.$f_name.grib > zero.$f_name.txt
-$grib_api_prefix/../bin/grib_dump -O pack.$f_name.grib > pack.$f_name.txt
+$grib_api_prefix/bin/grib_dump -O zero.$f_name.grib > zero.$f_name.txt
+$grib_api_prefix/bin/grib_dump -O pack.$f_name.grib > pack.$f_name.txt
 
 \rm -f zero.$f_name.grib pack.$f_name.grib
 
